@@ -1,0 +1,8 @@
+FROM postgres:latest
+
+ENV POSTGRES_DB=online_courses
+ENV POSTGRES_USER=postgres
+ENV POSTGRES_PASSWORD=postgres
+ENV POSTGRES_HOST_AUTH_METHOD=trust
+
+EXPOSE 5432

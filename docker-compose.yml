@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  db:
+    build: .
+    ports:
+      - '5431:5432'
+    environment:
+      POSTGRES_DB: online_courses
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres

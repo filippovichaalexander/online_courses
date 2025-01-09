@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Courses</title>
+</head>
+<body>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create Course</button>
+    </form>
+    <h2>All courses:</h2>
+    <ul>
+    {% for course in courses %}
+        <li>
+            <p> {{ course.title }} </p>
+            <p> {{ course.part.title }}</p> <!-- Access part title if defined -->
+            <a href="{% url 'update_course' course.id %}">Edit</a> |
+            <a href="{% url 'delete_course' course.id %}">Delete</a>
+        </li>
+        <ul>
+        {% for part in parts %}
+            <li>
+                <p>{{ part.title }}</p>
+                <a href="{% url 'update_part' part.id %}">Edit</a> |
+                <a href="{% url 'delete_part' part.id %}">Delete</a>
+            </li>
+            <ul>
+                {% for topic in part.topics.all %}
+                    <li>
+                        <p>{{ topic.name }}</p>
+                        <a href="{% url 'update_topic' topic.id %}">Edit</a> |
+                        <a href="{% url 'delete_topic' topic.id %}">Delete</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+        </ul>
+    {% endfor %}
+    </ul>
+
+    {% block content %}{% endblock %}
+</body>
+</html>

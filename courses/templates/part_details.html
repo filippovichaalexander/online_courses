@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>course details</title>
+</head>
+<body>
+<h4> Course name: {{ course.title }} </h4>
+<!--            <a href="{% url 'update_course' course.id %}">Edit</a>-->
+<!--            <a href="{% url 'delete_course' course.id %}">Delete</a>-->
+<h4>Part name: {{ part.title }}</h4>
+<h4>Part Topics</h4>
+<ul>
+    {% for topic in topics %}
+    <li>
+        <p>Topic name: {{ topic.title }}</p>
+        <!--                        <a href="{% url 'update_topic' topic.id %}">Edit</a>-->
+        <!--                        <a href="{% url 'delete_topic' topic.id %}">Delete</a>-->
+    </li>
+    {% endfor %}
+</ul>
+</body>
+</html>

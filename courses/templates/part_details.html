@@ -9,6 +9,14 @@
 <!--            <a href="{% url 'update_course' course.id %}">Edit</a>-->
 <!--            <a href="{% url 'delete_course' course.id %}">Delete</a>-->
 <h4>Part name: {{ part.title }}</h4>
+<h4>Create a topic of the course:</h4>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.title }}
+    {{ form.course_title }}
+    {{ form.part_title }}
+    <button type="submit">Create Topic</button>
+</form>
 <h4>Part Topics</h4>
 <ul>
     {% for topic in topics %}

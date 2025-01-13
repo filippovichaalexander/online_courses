@@ -1,10 +1,16 @@
-{% extends "courses_list.html" %}
-
-{% block content %}
-<h2>Edit Course</h2>
-<form method="post">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>course details</title>
+</head>
+<body>
+<h4>Edit course:</h4>
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ form.title }}
+    {{ form.course_title }}
     <button type="submit">Save Changes</button>
 </form>
-{% endblock %}
+</body>
+</html>

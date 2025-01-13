@@ -1,62 +1,82 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .forms import TopicDocumentForm, CourseForm
+from .forms import TopicDocumentForm, CourseForm, PartForm, TopicForm
 from .models import Course, CoursePart, CourseTopic, TopicDocument
 
 
 def courses_list(request):
-    courses = Course.objects.all()  # Fetching TopicDocument instances
-    parts = CoursePart.objects.all()
-    topics = CourseTopic.objects.all()
-
+    courses = Course.objects.all().order_by('id')
     if request.method == 'POST':
         form = CourseForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('success')  # Make sure to have a success URL
+            return redirect('success')
     else:
-        form = CourseForm()  # Initialize the form for GET request
+        form = CourseForm()
 
     context = {
-        'form': form,  # Include the form in the context
+        'form': form,
         'courses': courses,
-        # 'parts': parts,
-        # 'topics': topics
     }
     return render(request, 'courses_list.html', context)
+
 
 def course_details(request, course_id):
     course = get_object_or_404(Course, id=course_id)
     parts = course.parts.all()
     topics = CourseTopic.objects.filter(part__course=course)
 
+    if request.method == 'POST':
+        form = PartForm(request.POST, initial={'course_title': course.title})
+        if form.is_valid():
+            part = form.save(commit=False)
+            part.course = course
+            part.save()
+            return redirect('success')
+    else:
+        form = PartForm(initial={'course_title': course.title})
+
     context = {
+        'form': form,
         'course': course,
         'parts': parts,
         'topics': topics,
     }
     return render(request, 'course_details.html', context)
 
+
 def part_details(request, course_id, part_id):
-    part = CoursePart.objects.get(id=part_id)
-    course = Course.objects.get(id=course_id)
-    topics = CourseTopic.objects.all()
+    part = get_object_or_404(CoursePart, id=part_id)
+    course = get_object_or_404(Course, id=course_id)
+    topics = part.topics.all()
+
+    if request.method == 'POST':
+        form = TopicForm(request.POST, initial={'course_title': course.title, 'part_title': part.title})
+        if form.is_valid():
+            topic = form.save(commit=False)
+            topic.part = part
+            topic.save()
+            return redirect('success')
+    else:
+        form = TopicForm(initial={'course_title': course.title, 'part_title': part.title})
 
     context = {
+        'form': form,
         'part': part,
         'course': course,
         'topics': topics,
     }
     return render(request, 'part_details.html', context)
 
+
 def update_course(request, course_id):
-    course = get_object_or_404(CourseForm, id=course_id)
+    course = get_object_or_404(Course, id=course_id)
 
     if request.method == 'POST':
         form = CourseForm(request.POST, instance=course)
         if form.is_valid():
             form.save()
-            return redirect('course_list')
+            return redirect('courses_list')
     else:
         form = CourseForm(instance=course)
 
@@ -64,7 +84,7 @@ def update_course(request, course_id):
 
 
 def delete_course(request, course_id):
-    course = get_object_or_404(CourseForm, id=course_id)
+    course = get_object_or_404(Course, id=course_id)
 
     if request.method == 'POST':
         # delete file itself
@@ -73,7 +93,9 @@ def delete_course(request, course_id):
         # delete db row
         course.delete()
         return redirect('courses_list')
-
+    else:
+        # Render a confirmation template or redirect to the courses_list view
+        return render(request, 'confirm_delete_course.html', {'course': course})
 
 def update_part(request, part_id):
     part = get_object_or_404(CoursePart, id=part_id)

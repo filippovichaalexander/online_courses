@@ -14,14 +14,14 @@
 </form>
 <h4> Course name: {{ course.title }} </h4>
 <!--            <a href="{% url 'update_course' course.id %}">Edit</a>-->
-<!--            <a href="{% url 'delete_course' course.id %}">Delete</a>-->
+<!--            <a href="{% url 'confirm_delete_course' course.id %}">Delete</a>-->
 <h4>Course Parts</h4>
 <ul>
     {% for part in parts %}
     <li>
         <p>Part name: {{ part.title }}</p>
-        <!--                <a href="{% url 'update_part' part.id %}">Edit</a>-->
-        <!--                <a href="{% url 'delete_part' part.id %}">Delete</a>-->
+        <a href="{% url 'update_part' part.id %}">Edit</a>
+        <a href="{% url 'delete_part' part.id %}">Delete</a>
         <a href="{% url 'part_details' course.id part.id %}">To part {{ part.title }} details</a>
     </li>
     {% endfor %}

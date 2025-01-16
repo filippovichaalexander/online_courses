@@ -8,13 +8,12 @@
 <h4>Create a part of the course:</h4>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.title }}
-    {{ form.course_title }}
+    {{ part_form.title }}
+    {{ part_form.course_id }}
+<!--        <input type="hidden" name="course_id" value="{{ course.title }}">-->
     <button type="submit">Create Part</button>
 </form>
 <h4> Course name: {{ course.title }} </h4>
-<!--            <a href="{% url 'update_course' course.id %}">Edit</a>-->
-<!--            <a href="{% url 'confirm_delete_course' course.id %}">Delete</a>-->
 <h4>Course Parts</h4>
 <ul>
     {% for part in parts %}

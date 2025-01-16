@@ -12,11 +12,11 @@ class CourseForm(forms.ModelForm):
 
 class PartForm(forms.ModelForm):
     title = forms.CharField(max_length=255, required=True)
-    course_title = forms.CharField(max_length=255, required=True, widget=forms.HiddenInput())
+    course_id = forms.CharField(max_length=255, required=True, widget=forms.HiddenInput())
 
     class Meta:
         model = CourseTopic
-        fields = ['title', 'course_title']
+        fields = ['title', 'course_id']
 
 
 class TopicForm(forms.ModelForm):

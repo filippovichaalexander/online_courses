@@ -20,28 +20,25 @@ def courses_list(request):
     }
     return render(request, 'courses_list.html', context)
 
-
 def course_details(request, course_id):
     course = get_object_or_404(Course, id=course_id)
     parts = course.parts.all()
 
     if request.method == 'POST':
-        form = PartForm(request.POST, initial={'course_title': course.title})
-        if form.is_valid():
-            part = form.save(commit=False)
-            part.course = course
+        part_form = PartForm(request.POST, initial={'course_id': course.id})
+        if part_form.is_valid():
+            part = part_form.save(commit=False)
             part.save()
             return redirect('success')
     else:
-        form = PartForm(initial={'course_title': course.title})
+        part_form = PartForm(initial={'course_id': course.id})
 
     context = {
-        'form': form,
+        'part_form': part_form,
         'course': course,
         'parts': parts,
     }
     return render(request, 'course_details.html', context)
-
 
 def part_details(request, course_id, part_id):
     part = get_object_or_404(CoursePart, id=part_id)

@@ -26,12 +26,10 @@ def course_details(request, course_id):
     parts = course.parts.all()
 
     if request.method == 'POST':
-        part_form = PartForm(request.POST, initial={'course': course})
-
+        part_form = PartForm(request.POST)
         if part_form.is_valid():
-            print('*****')
             part = part_form.save(commit=False)
-            # part.course = course
+            part.course = course
             part.save()
             return redirect('success')
     else:
@@ -43,28 +41,6 @@ def course_details(request, course_id):
         'parts': parts,
     }
     return render(request, 'course_details.html', context)
-
-
-def part_details(request, course_id, part_id):
-    part = get_object_or_404(CoursePart, id=part_id)
-    course = get_object_or_404(Course, id=course_id)
-    topics = part.topics.all()
-
-    if request.method == 'POST':
-        form = PartForm(request.POST, instance={'course_title': course.title, 'part_title': part.title})
-        if form.is_valid():
-            form.save()
-            return redirect('success')
-    else:
-        form = PartForm(instance={'course_title': course.title, 'part_title': part.title})
-
-    context = {
-        'form': form,
-        'part': part,
-        'course': course,
-        'topics': topics,
-    }
-    return render(request, 'part_details.html', context)
 
 
 def update_course(request, course_id):
@@ -96,6 +72,50 @@ def delete_course(request, course_id):
         return render(request, 'confirm_delete_course.html', {'course': course})
 
 
+def part_details(request, course_id, part_id):
+    part = get_object_or_404(CoursePart, id=part_id)
+    course = get_object_or_404(Course, id=course_id)
+    topics = part.topics.all()
+
+    if request.method == 'POST':
+        topic_form = TopicForm(request.POST)
+        if topic_form.is_valid():
+            topic = topic_form.save(commit=False)
+            topic.part = part
+            topic.save()
+            return redirect('success')
+    else:
+        topic_form = TopicForm(initial={'part_id': part.id})
+
+    context = {
+        'topic_form': topic_form,
+        'part': part,
+        'course': course,
+        'topics': topics,
+    }
+    return render(request, 'part_details.html', context)
+
+
+def create_course_part(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+
+    if request.method == 'POST':
+        part_form = PartForm(request.POST)
+        if part_form.is_valid():
+            part = part_form.save(commit=False)
+            part.course = course
+            part.save()
+            return redirect('part_details', course_id=course.id, part_id=part.id)
+    else:
+        part_form = PartForm(initial={'course_id': course.id})
+
+    context = {
+        'part_form': part_form,
+        'course': course,
+    }
+    return render(request, 'create_course_part.html', context)
+
+
 def update_part(request, part_id):
     part = get_object_or_404(CoursePart, id=part_id)
     course = get_object_or_404(Course, id=part.course.id)
@@ -103,12 +123,10 @@ def update_part(request, part_id):
     if request.method == 'POST':
         form = PartForm(request.POST, instance=part)
         if form.is_valid():
-            part = form.save(commit=False)
-            part.course = course
-            part.save()
+            form.save()
             return redirect('course_details', course_id=course.id)
     else:
-        form = PartForm(instance=part, initial={'course_title': course.title})
+        form = PartForm(instance=part, initial={'course_id': course.id})
 
     context = {
         'form': form,
@@ -135,30 +153,34 @@ def delete_part(request, part_id):
 
 def update_topic(request, topic_id):
     topic = get_object_or_404(CourseTopic, id=topic_id)
+    part = get_object_or_404(CoursePart, id=topic.part.id)
 
     if request.method == 'POST':
-        form = CourseTopic(request.POST, instance=topic)
-        if form.is_valid():
-            form.save()
-            return redirect('course_list')
+        topic_form = TopicForm(request.POST, instance=topic)
+        if topic_form.is_valid():
+            topic_form.save()
+            return redirect('part_details', course_id=part.course.id, part_id=part.id)
     else:
-        form = CourseTopic(instance=topic)
+        topic_form = TopicForm(instance=topic, initial={'part_id': part.id})
 
-    return render(request, 'update_topic.html', {'form': form})
+    context = {
+        'topic_form': topic_form,
+        'part': part,
+    }
+
+    return render(request, 'update_topic.html', context)
 
 
 def delete_topic(request, topic_id):
     topic = get_object_or_404(CourseTopic, id=topic_id)
+    part = get_object_or_404(CoursePart, id=topic.part.id)
+    course_id = part.course.id
 
     if request.method == 'POST':
-        # delete file itself
-        # if document.file:
-        #     document.file.delete(save=False)
-        # delete db row
         topic.delete()
-        return redirect('courses_list')
+        return redirect('part_details', course_id=course_id, part_id=part.id)
 
-    return render(request, 'confirm_delete.html', {'topic': topic})
+    return render(request, 'confirm_delete_topic.html', {'topic': topic})
 
 
 # documents

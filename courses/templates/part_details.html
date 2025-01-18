@@ -10,9 +10,8 @@
 <h4>Create a topic of the course:</h4>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.title }}
-    {{ form.course_title }}
-    {{ form.part_title }}
+    {{ topic_form.title }}
+    {{ topic_form.part_id }}
     <button type="submit">Create Topic</button>
 </form>
 <h4>Part Topics</h4>
@@ -20,8 +19,8 @@
     {% for topic in topics %}
     <li>
         <p>Topic name: {{ topic.title }}</p>
-        <!--                        <a href="{% url 'update_topic' topic.id %}">Edit</a>-->
-        <!--                        <a href="{% url 'delete_topic' topic.id %}">Delete</a>-->
+        <a href="{% url 'update_topic' topic.id %}">Edit</a>
+        <a href="{% url 'delete_topic' topic.id %}">Delete</a>
     </li>
     {% endfor %}
 </ul>

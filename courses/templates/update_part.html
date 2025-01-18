@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>course details</title>
+    <title>Update Part</title>
 </head>
 <body>
 <h4>Edit part:</h4>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.title }}
-    {{ form.course_title }}
+    {{ form.course_id }}
     <button type="submit">Save Changes</button>
 </form>
 </body>

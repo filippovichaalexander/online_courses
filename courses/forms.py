@@ -9,7 +9,6 @@ class CourseForm(forms.ModelForm):
         model = Course
         fields = ['title']
 
-
 class PartForm(forms.ModelForm):
     title = forms.CharField(max_length=255, required=True)
     course_id = forms.CharField(max_length=255, required=True, widget=forms.HiddenInput())
@@ -18,15 +17,14 @@ class PartForm(forms.ModelForm):
         model = CoursePart
         fields = ['title', 'course_id']
 
-
 class TopicForm(forms.ModelForm):
     title = forms.CharField(max_length=255, required=True)
-    course_title = forms.CharField(max_length=255, required=True, widget=forms.HiddenInput())
-    part_title = forms.CharField(max_length=255, required=True, widget=forms.HiddenInput())
+    # course_title = forms.CharField(max_length=255, required=True, widget=forms.HiddenInput())
+    part_id = forms.CharField(max_length=255, required=True, widget=forms.HiddenInput())
 
     class Meta:
         model = CourseTopic
-        fields = ['title', 'course_title', 'part_title']
+        fields = ['title', 'part_id']
 
 
 class TopicDocumentForm(forms.ModelForm):

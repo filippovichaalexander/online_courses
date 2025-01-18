@@ -15,7 +15,7 @@ class PartForm(forms.ModelForm):
     course_id = forms.CharField(max_length=255, required=True, widget=forms.HiddenInput())
 
     class Meta:
-        model = CourseTopic
+        model = CoursePart
         fields = ['title', 'course_id']
 
 

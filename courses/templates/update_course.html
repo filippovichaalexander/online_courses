@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>course details</title>
+</head>
+<body>
+<h4>Edit course:</h4>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.title }}
+    {{ form.description }}
+    {{ form.course_title }}
+    <button type="submit">Save Changes</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Course Part</title>
+</head>
+<body>
+<h4>Create a part of the course: {{ course.title }}</h4>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ part_form.title }}
+    {{ part_form.course_id }}
+    <button type="submit">Create Part</button>
+</form>
+</body>
+</html>

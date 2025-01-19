@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Courses</title>
+</head>
+<body>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.title }}
+    {{ form.description }}
+    <button type="submit">Create Course</button>
+</form>
+<h2>All courses:</h2>
+<ul>
+    {% for course in courses %}
+    <li>
+        <p> Course name: {{ course.title }} </p>
+        <a href="{% url 'update_course' course.id %}">Edit</a>
+        <a href="{% url 'confirm_delete_course' course.id %}">Delete</a>
+        <a href="{% url 'course_details' course.id %}">To course details</a>
+    </li>
+    {% endfor %}
+    <ul>
+</body>
+</html>

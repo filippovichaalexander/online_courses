@@ -16,7 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls.static import static
+from django.conf import settings
+from courses import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-]
+    path('document_list/', views.document_list, name='document_list'),
+    path('update_document/<int:document_id>', views.update_document, name='update_document'),
+    path('delete_document/<int:document_id>', views.delete_document, name='delete_document'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -7,7 +7,7 @@ class CourseForm(forms.ModelForm):
 
     class Meta:
         model = Course
-        fields = ['title']
+        fields = ['title', 'description']
 
 class PartForm(forms.ModelForm):
     title = forms.CharField(max_length=255, required=True)

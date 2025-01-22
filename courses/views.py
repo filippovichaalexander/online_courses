@@ -194,7 +194,7 @@ def document_list(request):
         form = TopicDocumentForm()
 
     documents = TopicDocument.objects.all()
-    return render(request, 'document_list.html', {'form': form, 'documents': documents})
+    return render(request, 'documents/document_list.html', {'form': form, 'documents': documents})
 
 
 def update_document(request, document_id):
@@ -208,7 +208,7 @@ def update_document(request, document_id):
     else:
         form = TopicDocumentForm(instance=document)
 
-    return render(request, 'update_document.html', {'form': form, 'document': document})
+    return render(request, 'documents/update_document.html', {'form': form, 'document': document})
 
 
 def delete_document(request, document_id):
@@ -222,4 +222,4 @@ def delete_document(request, document_id):
         document.delete()
         return redirect('document_list')
 
-    return render(request, 'confirm_delete.html', {'document': document})
+    return render(request, 'documents/confirm_delete.html', {'document': document})

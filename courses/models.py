@@ -1,16 +1,32 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.timezone import now
 
+class SoftDeleteManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(deleted_at__isnull=True)
 
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    created_by = models.ForeignKey(User,  on_delete=models.SET_NULL, null=True, blank=True)
 
+    objects = SoftDeleteManager()
+    all_objects = models.Manager()
     class Meta:
         abstract = True
 
+    def delete(self, using=None, keep_parents=False):
+        self.deleted_at = now()
+        self.save()
+
+    def hard_delete(self, using=None, keep_parents=False):
+        super().delete(using, keep_parents)
+
+    def restore(self):
+        self.deleted_at = None
+        self.save()
 
 class Course(BaseModel):
     title = models.CharField(max_length=255, unique=True)

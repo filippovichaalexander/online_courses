@@ -44,7 +44,14 @@ class CoursePart(BaseModel):
     title = models.CharField(max_length=255)
 
     class Meta:
-        unique_together = ('course', 'title')
+        # unique_together = ('course', 'title')
+        constraints = [
+            models.UniqueConstraint(
+                fields = ('course', 'title'),
+                condition = models.Q(deleted_at__isnull=True),
+                name='unique_course_part'
+            )
+        ]
 
     def __str__(self):
         return f"{self.course.title}-{self.title}"

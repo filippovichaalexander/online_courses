@@ -1,14 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Delete Part</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}Delete Part{% endblock %}
+
+{% block delete_part %}
     <h1>Are you sure you want to delete "{{ part.title }}"?</h1>
     <form method="post">
         {% csrf_token %}
         <button type="submit">Yes, delete</button>
     </form>
     <a href="{% url 'course_details' part.course.id %}">No, go back</a>
-</body>
-</html>
+{% endblock %}

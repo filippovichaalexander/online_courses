@@ -1,18 +1,39 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
+from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import TopicDocumentForm, CourseForm, PartForm, TopicForm
 from .models import Course, CoursePart, CourseTopic, TopicDocument
 
 
+# def courses_list(request):
+#     courses = Course.objects.all().order_by('id')
+#     if request.method == 'POST':
+#         form = CourseForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('success')
+#     else:
+#         form = CourseForm()
+#
+#     context = {
+#         'form': form,
+#         'courses': courses,
+#     }
+#     return render(request, 'courses_list.html', context)
+
+
 def courses_list(request):
     courses = Course.objects.all().order_by('id')
-    if request.method == 'POST':
-        form = CourseForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('success')
-    else:
-        form = CourseForm()
+    form = None
+
+    if request.user.is_authenticated and request.user.groups.filter(name='Instructors').exists():
+        if request.method == 'POST':
+            form = CourseForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('success')
+        else:
+            form = CourseForm()
 
     context = {
         'form': form,
@@ -42,7 +63,8 @@ def course_details(request, course_id):
     }
     return render(request, 'course_details.html', context)
 
-
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Instructors').exists())
 def update_course(request, course_id):
     course = get_object_or_404(Course, id=course_id)
 
@@ -56,7 +78,8 @@ def update_course(request, course_id):
 
     return render(request, 'update_course.html', {'form': form})
 
-
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Instructors').exists())
 def delete_course(request, course_id):
     course = get_object_or_404(Course, id=course_id)
 

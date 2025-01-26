@@ -1,16 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>course details</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}Course Details{% endblock %}
+
+{% block content %}
 <h4>Create a part of the course:</h4>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ part_form.title }}
     {{ part_form.course_id }}
-<!--        <input type="hidden" name="course_id" value="{{ course.title }}">-->
     <button type="submit">Create Part</button>
 </form>
 <h4> Course name: {{ course.title }} </h4>
@@ -26,5 +23,4 @@
     </li>
     {% endfor %}
 </ul>
-</body>
-</html>
+{% endblock %}

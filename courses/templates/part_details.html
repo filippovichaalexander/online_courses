@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>course details</title>
-</head>
-<body>
+
+{% extends 'base.html' %}
+
+{% block title %}Part Details{% endblock %}
+
+{% block part_details %}
 <h4> Course name: {{ course.title }} </h4>
 <h4>Part name: {{ part.title }}</h4>
 <h4>Create a topic of the course:</h4>
@@ -24,5 +23,4 @@
     </li>
     {% endfor %}
 </ul>
-</body>
-</html>
+{% endblock %}

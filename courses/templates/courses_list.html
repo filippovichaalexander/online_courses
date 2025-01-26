@@ -1,16 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Manage Courses</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}Manage Courses{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.title }}
     {{ form.description }}
     <button type="submit">Create Course</button>
 </form>
+{% endif %}
 <h2>All courses:</h2>
 <ul>
     {% for course in courses %}
@@ -21,6 +21,5 @@
         <a href="{% url 'course_details' course.id %}">To course details</a>
     </li>
     {% endfor %}
-    <ul>
-</body>
-</html>
+</ul>
+{% endblock %}

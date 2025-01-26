@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Confirm Delete Topic</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}Confirm Delete Topic{% endblock %}
+
+{% block delete_topic %}
     <h2>Confirm Delete Topic</h2>
     <p>Are you sure you want to delete the topic "{{ topic.title }}"?</p>
     <form method="post">
@@ -12,5 +10,4 @@
         <button type="submit">Confirm Delete</button>
         <a href="{% url 'part_details' course_id=topic.part.course.id part_id=topic.part.id %}">Cancel</a>
     </form>
-</body>
-</html>
+{% endblock %}

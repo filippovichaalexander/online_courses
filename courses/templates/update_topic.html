@@ -3,11 +3,19 @@
 {% block title %}Update Topic{% endblock %}
 
 {% block update_topic %}
-<h2>Edit Topic</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ topic_form.title }}
-    {{ topic_form.part_id }}
-    <button type="submit">Save Changes</button>
-</form>
+<div class="container my-5">
+    <h2 class="mb-4">Edit Topic</h2>
+    <form method="post" class="mb-4">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="id_title" class="form-label">{{ topic_form.title.label }}</label>
+            {{ topic_form.title }}
+        </div>
+
+        {{ topic_form.part_id }}
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+</div>
 {% endblock %}

@@ -3,10 +3,14 @@
 {% block title %}Delete Course{% endblock %}
 
 {% block content %}
-    <h1>Are you sure you want to delete "{{ course.title }}"?</h1>
-    <form method="post">
+<div class="container my-5">
+    <h1 class="mb-4">Are you sure you want to delete <strong>"{{ course.title }}"?</strong></h1>
+
+    <form method="post" class="mb-3">
         {% csrf_token %}
-        <button type="submit">Yes, delete</button>
+        <button type="submit" class="btn btn-danger">Yes, delete</button>
     </form>
-    <a href="{% url 'courses_list' %}">No, go back</a>
+
+    <a href="{% url 'courses_list' %}" class="btn btn-secondary">No, go back</a>
+</div>
 {% endblock %}

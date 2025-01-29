@@ -4,34 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Coures App{% endblock %}</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </head>
 <body>
 <header>
-    <nav>
-        <ul>
-            <li><a href="{% url 'index' %}">Home Page</a></li>
-            {% if user.is_authenticated %}
-            <li><a href="{% url 'courses_list' %}">See all courses...</a></li>
-            <li><a href="{% url 'document_list' %}">See Courses Documents...</a></li>
-
-            <li>
-                <form method="post" action="{% url 'logout' %}">
-                    {% csrf_token %}
-                    <button type="submit">Logout</button>
-                </form>
-            </li>
-
-            {% else %}
-            {% if request.resolver_match.url_name != 'login' %}
-            <li><a href="{% url 'login' %}">Login</a></li>
-            {% endif %}
-            {% if request.resolver_match.url_name != 'register' %}
-            <li><a href="{% url 'register' %}">Register1</a></li>
-            {% endif %}
-            {% endif %}
-        </ul>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'index' %}">Courses App</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">Home Page</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'courses_list' %}">See all courses...</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'document_list' %}">See Courses Documents...</a>
+                    </li>
+                    <li class="nav-item">
+                        <form method="post" action="{% url 'logout' %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link nav-link">Logout</button>
+                        </form>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
     </nav>
 </header>
 

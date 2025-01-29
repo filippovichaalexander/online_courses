@@ -3,24 +3,35 @@
 {% block title %}Course Details{% endblock %}
 
 {% block content %}
-<h4>Create a part of the course:</h4>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ part_form.title }}
-    {{ part_form.course_id }}
-    <button type="submit">Create Part</button>
-</form>
-<h4> Course name: {{ course.title }} </h4>
-<p> Course description: {{ course.description }} </p>
-<h4>Course Parts</h4>
-<ul>
-    {% for part in parts %}
-    <li>
-        <p>Part name: {{ part.title }}</p>
-        <a href="{% url 'update_part' part.id %}">Edit</a>
-        <a href="{% url 'delete_part' part.id %}">Delete</a>
-        <a href="{% url 'part_details' course.id part.id %}">To part {{ part.title }} details</a>
-    </li>
-    {% endfor %}
-</ul>
+<div class="container my-5">
+    <h4>Create a part of the course:</h4>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="id_title" class="form-label">Part Title</label>
+            {{ part_form.title }}
+        </div>
+        {{ part_form.course_id }}
+        <button type="submit" class="btn btn-success">Create Part</button>
+    </form>
+
+    <h4 class="mt-4">Course name: <strong>{{ course.title }}</strong></h4>
+    <p><strong>Course description:</strong> {{ course.description }}</p>
+
+    <h4 class="mt-4">Course Parts</h4>
+    <ul class="list-group">
+        {% for part in parts %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <strong>Part name:</strong> {{ part.title }}
+            </div>
+            <div>
+                <a href="{% url 'update_part' part.id %}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{% url 'delete_part' part.id %}" class="btn btn-danger btn-sm">Delete</a>
+                <a href="{% url 'part_details' course.id part.id %}" class="btn btn-info btn-sm">Part details</a>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}

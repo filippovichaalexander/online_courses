@@ -1,0 +1,21 @@
+[tool.black]
+line-length = 120
+exclude = '''
+/(
+    \.git
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | env
+  | venv
+  | __pycache__
+  | migrations
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 120
+known_first_party = ["work_out"]
+known_third_party = ["django", "rest_framework"]
+skip = ["migrations", "env", "venv", ".venv"]

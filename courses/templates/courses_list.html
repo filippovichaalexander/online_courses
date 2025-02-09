@@ -1,26 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Manage Courses</title>
-</head>
-<body>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.title }}
-    {{ form.description }}
-    <button type="submit">Create Course</button>
-</form>
-<h2>All courses:</h2>
-<ul>
+{% extends 'base.html' %}
+
+{% block title %}Manage Courses{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<div class="container">
+    <h2 class="mb-4">Create a New Course</h2>
+    <!--    <form method="post" enctype="multipart/form-data">-->
+    <!--        {% csrf_token %}-->
+
+    <!--        <div class="mb-3">-->
+    <!--            <label for="formTitle" class="form-label">Course Title</label>-->
+    <!--            {{ form.title }}-->
+    <!--        </div>-->
+
+    <!--        <div class="mb-3">-->
+    <!--            <label for="formDescription" class="form-label">Course Description</label>-->
+    <!--            {{ form.description}}-->
+    <!--        </div>-->
+
+    <!--        <button type="submit" class="btn btn-primary my-3">Create Course</button>-->
+    <!--    </form>-->
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="id_title" class="form-label">Course Title</label>
+            {{ form.title }}
+            <div id="emailHelp" class="form-text">A course of your own</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="id_description" class="form-label">Course Description</label>
+            {{ form.description }}
+        </div>
+
+
+        <button type="submit" class="btn btn-success my-3">Submit</button>
+    </form>
+
+    {% endif %}
+    <h2>All courses:</h2>
+    <ul class="list-group">
+        {% for course in courses %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <strong>Course name:</strong> {{ course.title }}
+            </div>
+            <div>
+                <a href="{% url 'update_course' course.id %}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{% url 'confirm_delete_course' course.id %}" class="btn btn-danger btn-sm">Delete</a>
+                <a href="{% url 'course_details' course.id %}" class="btn btn-info btn-sm">Details</a>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}
+
+
+<ul class="list-group">
     {% for course in courses %}
-    <li>
-        <p> Course name: {{ course.title }} </p>
-        <a href="{% url 'update_course' course.id %}">Edit</a>
-        <a href="{% url 'confirm_delete_course' course.id %}">Delete</a>
-        <a href="{% url 'course_details' course.id %}">To course details</a>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+            <strong>Course name:</strong> {{ course.title }}
+        </div>
+        <div>
+            <a href="{% url 'update_course' course.id %}" class="btn btn-warning btn-sm">Edit</a>
+            <a href="{% url 'confirm_delete_course' course.id %}" class="btn btn-danger btn-sm">Delete</a>
+            <a href="{% url 'course_details' course.id %}" class="btn btn-info btn-sm">Details</a>
+        </div>
     </li>
     {% endfor %}
-    <ul>
-</body>
-</html>
+</ul>

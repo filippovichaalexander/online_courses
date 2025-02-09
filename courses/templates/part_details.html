@@ -1,28 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>course details</title>
-</head>
-<body>
-<h4> Course name: {{ course.title }} </h4>
-<h4>Part name: {{ part.title }}</h4>
-<h4>Create a topic of the course:</h4>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ topic_form.title }}
-    {{ topic_form.part_id }}
-    <button type="submit">Create Topic</button>
-</form>
-<h4>Part Topics</h4>
-<ul>
-    {% for topic in topics %}
-    <li>
-        <p>Topic name: {{ topic.title }}</p>
-        <a href="{% url 'update_topic' topic.id %}">Edit</a>
-        <a href="{% url 'delete_topic' topic.id %}">Delete</a>
-    </li>
-    {% endfor %}
-</ul>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Part Details{% endblock %}
+
+{% block part_details %}
+<div class="container my-5">
+    <h4 class="mb-4">Course name: <strong>{{ course.title }}</strong></h4>
+    <h4 class="mb-4">Part name: <strong>{{ part.title }}</strong></h4>
+
+    <h5 class="mt-4">Create a topic of the course:</h5>
+    <form method="post" enctype="multipart/form-data" class="mb-4">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="id_title" class="form-label">Topic Title</label>
+            {{ topic_form.title }} <!-- Make sure to customize topic_form.title in your form definition -->
+        </div>
+
+        {{ topic_form.part_id }} <!-- Hidden input -->
+
+        <button type="submit" class="btn btn-success">Create Topic</button>
+    </form>
+
+    <h5 class="mt-4">Part Topics</h5>
+    <ul class="list-group">
+        {% for topic in topics %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <strong>Topic name:</strong> {{ topic.title }}
+            </div>
+            <div>
+                <a href="{% url 'update_topic' topic.id %}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{% url 'delete_topic' topic.id %}" class="btn btn-danger btn-sm">Delete</a>
+            </div>
+        </li>
+        {% empty %}
+        <li class="list-group-item text-muted">No topics available for this part.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

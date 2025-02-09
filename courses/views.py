@@ -4,35 +4,23 @@ from django.shortcuts import get_object_or_404, redirect, render
 from .forms import CourseForm, PartForm, TopicDocumentForm, TopicForm
 from .models import Course, CoursePart, CourseTopic, TopicDocument
 
-# def courses_list(request):
-#     courses = Course.objects.all().order_by('id')
-#     if request.method == 'POST':
-#         form = CourseForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('success')
-#     else:
-#         form = CourseForm()
-#
-#     context = {
-#         'form': form,
-#         'courses': courses,
-#     }
-#     return render(request, 'courses_list.html', context)
+
+def is_instructor(user):
+    return user.groups.filter(name="Instructors").exists()
 
 
+@login_required
+@user_passes_test(is_instructor)
 def courses_list(request):
     courses = Course.objects.all().order_by("id")
-    form = None
 
-    if request.user.is_authenticated and request.user.groups.filter(name="Instructors").exists():
-        if request.method == "POST":
-            form = CourseForm(request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect("success")
-        else:
-            form = CourseForm()
+    if request.method == "POST":
+        form = CourseForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("success")
+    else:
+        form = CourseForm()
 
     context = {
         "form": form,
@@ -64,7 +52,7 @@ def course_details(request, course_id):
 
 
 @login_required
-@user_passes_test(lambda u: u.groups.filter(name="Instructors").exists())
+@user_passes_test(is_instructor)
 def update_course(request, course_id):
     course = get_object_or_404(Course, id=course_id)
 
@@ -80,7 +68,7 @@ def update_course(request, course_id):
 
 
 @login_required
-@user_passes_test(lambda u: u.groups.filter(name="Instructors").exists())
+@user_passes_test(is_instructor)
 def delete_course(request, course_id):
     course = get_object_or_404(Course, id=course_id)
 
